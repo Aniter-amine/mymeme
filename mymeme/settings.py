@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '2@tea=$a4&e879k4trkc=)#i%03f@k1_7q51yk&poc!ag7)gzo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['mymemee.herokuapp.com', '127.0.0.1']
 
