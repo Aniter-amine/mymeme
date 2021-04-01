@@ -1,0 +1,1 @@
+web: gunicorn mymeme.wsgi --log-file -

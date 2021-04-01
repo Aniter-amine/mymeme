@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% block title %}Memes - Profile "{{ page_user }}"{% endblock %}
+
+{% block content %}
+<style>
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+body {
+    background: #654ea3;
+    background: linear-gradient(to right, #e96443, #904e95);
+    min-height: 100vh
+}
+</style>
+
+<div class="row py-5 px-4">
+ <div class="col-md-5 mx-auto">
+     <!-- Profile widget -->
+     <div class="bg-white shadow rounded overflow-hidden">
+         <div class="px-4 pt-0 pb-4 cover">
+             <div class="media align-items-end profile-head">
+                 <div class="profile mr-3"><img src="{{ page_user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ page_user }}" width="130" class="rounded mb-2 img-thumbnail"></div>
+                 {% if request.user.is_authenticated and request.user != page_user %}
+                    {% if follow_status %}
+                        <a href="{% url 'users:follow' page_user.username %}" class="btn btn-danger">Unfollow</a>
+                    {% else %}
+                        <a href="{% url 'users:follow' page_user.username %}" class="btn btn-success">Follow</a>
+                    {% endif %}
+                 {% endif %}
+                 <div class="media-body mb-5 text-white">
+                     <h4 class="mt-0 mb-0">{{ page_user }}</h4>
+                     <p class="small mb-4"></p>
+                 </div>
+             </div>
+         </div>
+         <div class="bg-light p-4 d-flex justify-content-end text-center">
+             <ul class="list-inline mb-0">
+                 <li class="list-inline-item">
+                     <h5 class="font-weight-bold mb-0 d-block">{{ user_posts.count }}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Memes</small>
+                 </li>
+                 <li class="list-inline-item">
+                     <h5 class="font-weight-bold mb-0 d-block">{{ following_count }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i><a href="{% url 'users:followers' page_user.username %}">Followers</a></small>
+                 </li>
+                 <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block">{{ followers_count }}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i><a href="{% url 'users:following' page_user.username %}">Following</a></small>
+                </li>
+             </ul>
+         </div>
+         <div class="py-4 px-4">
+             <div class="d-flex align-items-center justify-content-between mb-3">
+                 <h5 class="mb-0">Recent photos</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+             </div>
+             <div class="row">
+              {% for meme in user_posts %}
+                 {% if meme.image %}
+                    <a href="{% url 'main:see-memes' meme.pk %}"><div class="col-lg-6 mb-2 pr-lg-1"><img src="{{ meme.image.url }}" alt="" class="img-fluid rounded shadow-sm"></div></a>
+                 {% elif meme.video %}
+                    <a href="{% url 'main:see-memes' meme.pk %}"><div class="col-lg-6 mb-2 pr-lg-1"><img src="{{ meme.video.url }}" alt="" class="img-fluid rounded shadow-sm"></div></a>
+                 {% endif %}
+              {% endfor %}
+               </div>
+         </div>
+     </div>
+ </div>
+</div>
+{% endblock %}

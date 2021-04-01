@@ -1,0 +1,92 @@
+{% extends 'layout.html' %}
+{% load socialaccount %}
+{% providers_media_js %}
+
+{% block title %}Memes - Trend{% endblock %}
+{% load humanize %}
+{% block content %}
+
+    {% for meme in trend %}
+
+    <div class="m-4">
+      <div class="card" style="text-align: left;">
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <a href="{% url 'users:profile' meme.user.username %}">
+                  <img src="{{ meme.user.socialaccount_set.all.0.get_avatar_url }}" alt="404">
+                </a>
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">{{ meme.user.username }}</p>
+              <p class="subtitle is-6">
+                <a href="{% url 'users:profile' meme.user.username %}">@{{ meme.user.username }}</a>
+              </p>
+            </div>
+            <div class="media-right">
+              <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                  <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                  <div class="dropdown-content">
+                    <a href="{% url 'main:bookmark-memes' meme.pk %}" class="dropdown-item">
+                      Save
+                    </a>
+                    {% if meme.image %}
+                    <a href="{{ meme.image.url }}" class="dropdown-item" download>
+                      Download
+                    </a>
+                    {% elif meme.video %}
+                    <a href="{{ meme.video.url }}" class="dropdown-item" download>
+                      Download
+                    </a>
+                    {% endif %}
+  
+                    {% if request.user == meme.user %}
+                    <a href="{% url 'main:delete-memes' meme.pk %}" class="dropdown-item">
+                      Delete
+                    </a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+          </div>
+          
+          <div class="content">
+            <a href="{{ meme.get_absolute_url }}" class="has-text-black">{{ meme.body }}</a>
+            <br>
+            <strong>{{ meme.date|naturaltime }}</strong>
+          </div>
+        </div>
+        <div class="card-image">
+          {% if meme.image %}
+          <figure class="image is-4by3">
+            <div class="photo-gallery">
+              <a href="{{ meme.image.url }}" data-lightbox="photos"><img src="{{ meme.image.url }}" alt="Placeholder image"></a>
+            </div>
+          </figure>
+          {% elif meme.video %}
+          <figure class="video is-4by3">
+            <video class="video-fluid z-depth-1" controls unmuted style="height:auto ;width: 100%">
+              <source src="{{ meme.video.url }}" type="video/mp4" />
+            </video>
+          </figure>
+          {% endif %}
+        </div>
+        <footer class="card-footer">
+          <span class="card-footer-item"><i class="fas fa-eye"></i> {{ meme.views }}</span>
+          <span class="card-footer-item"><i class="fas fa-heart"></i> {{ meme.likes.count }}</span>
+        </footer>
+      </div>
+    </div>
+
+    {% endfor %}
+
+{% endblock %}

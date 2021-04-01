@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<div class='columns'>
+  <div class='container profile'>
+    <div class='section profile-heading'>
+      <div class='columns is-mobile is-multiline'>
+        <div class='column is-2'>
+          <span class='header-icon user-profile-image'>
+            <img alt='' src='{{ page_user.socialaccount_set.all.0.get_avatar_url }}' style="height: 100%;width: auto;">
+          </span>
+        </div>
+        <div class='column is-4-tablet is-10-mobile name'>
+          <p>
+            <span class='title is-bold'>{{ page_user.username }}</span>
+            <br>
+            <span><small>@{{ page_user.username }}</small></span>
+          </p>
+          <p class='tagline'>
+            {% if request.user.is_authenticated and request.user != page_user %}
+                  {% if follow_status == False %}
+                    <a class='button is-success' href="{% url 'users:follow' page_user.username %}" id='edit-preferences' style='margin: 7px 0'>
+                      Follow
+                    </a>
+                  {% else %}
+                    <a class='button is-danger' href="{% url 'users:follow' page_user.username %}" id='edit-preferences' style='margin: 7px 0'>
+                      Unfollow
+                    </a>
+                  {% endif %}
+            {% endif %}
+          </p>
+        </div>
+        <div class='column is-2-tablet is-4-mobile has-text-centered'>
+          <a href="{% url 'users:followers' page_user %}">
+            <p class='stat-val'>{{ followers_count }}</p>
+            <p class='stat-key'>Followers</p>
+          </a>
+        </div>
+        <div class='column is-2-tablet is-4-mobile has-text-centered'>
+          <a href="{% url 'users:following' page_user %}">
+            <p class='stat-val'>{{ following_count }}</p>
+            <p class='stat-key'>Following</p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class='box' style='border-radius: 0px;'>
+      <!-- Main container -->
+      <div class='columns'>
+        <div class='column is-2-tablet user-property-count has-text-centered'>
+          <p class='subtitle is-5'>
+            <strong></strong>
+            {{ user_posts.count }}
+            <br>
+            properties
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-mobile is-multiline is-centered">
+      
+      {% for meme in user_posts %}
+
+        {% if meme.image %}
+          <div class="column is-one-quarter">
+            <div class="box">
+            <figure class="image is-4by3">
+              <a href="{{ meme.get_absolute_url }}">
+                <img src="{{ meme.image.url }}" alt="Placeholder image">
+              </a>
+            </figure>
+          </div>
+        </div>
+        {% elif meme.video %}
+
+          <div class="column is-one-quarter">
+            <div class="box">
+            <a href="{{ meme.get_absolute_url }}">
+              <video width="640" controls="controls" preload="metadata">
+                <source src="{{ meme.video.url }}#t=0.5" type="video/mp4">        
+              </video>      
+            </a>
+          </div>
+        </div>
+        {% endif %}
+
+        {% empty %}
+        <h1>This Account Has No Memes</h1>
+        
+      {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

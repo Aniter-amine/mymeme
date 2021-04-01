@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% load socialaccount %}
+{% providers_media_js %}
+
+{% block title %}Memes - Login{% endblock %}
+
+{% block content %}
+
+<div class="login-form">
+ <form>
+     <h2 class="text-center">Sign in</h2>		
+     <p class="text-center">Log in to save your progress. We won't post anything anywhere.</p>
+     <div class="text-center social-btn">
+         <a href="{% provider_login_url "facebook" %}" class="btn btn-primary btn-block"><i class="bi bi-facebook"></i> Sign in with <b>Facebook</b></a>
+         <a href="{% provider_login_url "linkedin" %}" class="btn btn-info btn-block"><i class="bi bi-linkedin"></i> Sign in with <b>Linkedin</b></a>
+         <a href="{% provider_login_url "google" %}" class="btn btn-danger btn-block"><i class="bi bi-google"></i> Sign in with <b>Google</b></a>
+     </div>      
+ </form>
+</div>
+
+
+{% endblock %}

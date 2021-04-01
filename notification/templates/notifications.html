@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% load humanize %}
+{% block title %}Memes - Notifications{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row notification-container">
+
+    {% for notification in notifications %}
+      <div class="box">
+        <article class="media">
+          <div class="media-left">
+            <figure class="image is-64x64">
+              <img src="{{ notification.sender.socialaccount_set.all.0.get_avatar_url }}" alt="Image">
+            </figure>
+          </div>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>{{ notification.sender }}</strong> <a href="{% url 'users:profile' notification.sender.username %}"><small>@{{ notification.sender }}</small></a> <small>{{ notification.date|naturaltime }}</small>
+                <br>
+                {{ notification.message }}
+                {% if notification.text %}
+                :
+                  <strong>
+                    {{ notification.text }}
+                  </strong>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+<script>
+
+</script>
+
+{% endblock %}

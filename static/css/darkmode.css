@@ -1,0 +1,17 @@
+:root {
+  --clr-light: #f9f9f9;
+  --clr-dark: #181818;
+  --foreground: var(--clr-dark);
+  --background: var(--clr-light);
+}
+body {
+  background: var(--background);
+  font-family: var(--ff-body);
+  font-size: 18px;
+}
+.darkmode {
+  --clr-light: #f9f9f9;
+  --clr-dark: #181818;
+  --foreground: var(--clr-light);
+  --background: var(--clr-dark);
+}
